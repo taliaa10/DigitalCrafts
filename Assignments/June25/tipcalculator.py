@@ -11,12 +11,13 @@ def tip_calc(total_amt, tip_pct):
   return tip
 
 def display_reciept(total_amt, tip_pct, tip_amt):
-  print(f'Your total was ${total_amt:,.2f}\nYou are tipping ${tip_amt:,.2f}\nYour total is ${tip_amt:,.2f}')
+  print(f'Your total was ${total_amt:,.2f}\nYou are tipping ${tip_amt:,.2f}\nYour total is ${tip_amt + total_amt:,.2f}')
+  print(".......BURGER TIME........")
 
 (total_amt, tip_pct) = prompt_user_input()
 
 tip_amt = tip_calc(total_amt, tip_pct)
 
-total = display_reciept(total_amt, tip_pct, tip_amt)
+display_reciept(total_amt, tip_pct, tip_amt)
 
 

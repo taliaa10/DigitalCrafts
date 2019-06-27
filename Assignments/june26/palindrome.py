@@ -4,18 +4,9 @@ def palindrome():
     for i in range(len(word)-1, -1, -1):
         reverse += word[i] 
     if reverse == word:
-        print("This is a palindrome")
-    else:
-        print("This is not a palindrome")
+        return True
+    return False
     
 
-# palindrome("racecar")
-# palindrome("car")
-# palindrome("mom")
-# palindrome("dad")
-# palindrome("mars")
-# palindrome("hi")
-# palindrome("civic")
-# palindrome("noon")
 
-palindrome()
+print(palindrome())
