@@ -2,11 +2,12 @@ def palindrome():
     word = input("Check if palindrome: ")
     reverse = ""
     for i in range(len(word)-1, -1, -1):
-        reverse += word[i] 
+        reverse += word[i]
     if reverse == word:
-        return True
-    return False
+        print("palindrome")
+    else:
+        print("not palindrome")
     
 
 
-print(palindrome())
+palindrome()
