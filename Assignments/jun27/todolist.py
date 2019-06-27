@@ -1,7 +1,7 @@
 
-todo = [{"Title": "clean room", "Priority": "high"}, {"Title": "wash car", "Priority": "medium"}, {"Title": "cook dinner", "Priority": "low"}]
+# todo = [{"Title": "clean room", "Priority": "high"}, {"Title": "wash car", "Priority": "medium"}, {"Title": "cook dinner", "Priority": "low"}]
 
-# todo = []
+todo = []
 
 # task = {
 #     "Title": "clean room",
@@ -30,9 +30,10 @@ while user_input != "q":
 
   if user_input == "2":
     print(todo)
-    item = int(input("Which item: "))
-    del todo[item]
-
+    task_remove = input("Which task: ")
+    for i in range(0, len(todo)-1):
+      if task_remove == todo[i]["Title"]:
+        del todo[i]
     print(todo)
 
   ### VIEW ALL TASKS ###
@@ -41,3 +42,4 @@ while user_input != "q":
 
 
   user_input = input("""\nPress 1 to add task\n\nPress 2 to delete task\n\nPress 3 to view all tasks\n\nPress q to quit\n\n""")
+
