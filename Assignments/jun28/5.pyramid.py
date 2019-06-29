@@ -4,6 +4,6 @@ def pyramid():
     for i in range(levels):
         print(' '*(levels - i -1 ) + '*' *(2 * i + 1))
 
-# pyramid()
+pyramid()
 
-print(' '*(2 - 1 -1 ) + '*' *(2 * 1 + 1))
+# print(' '*(2 - 1 -1 ) + '*' *(2 * 1 + 1))

@@ -6,8 +6,6 @@ def remove_duplicates(array):
     for name in array:
         if name not in dups_removed:
             dups_removed.append(name)
-    else:
-        names = dups_removed
-        print(names)
+    print(dups_removed)
 
 remove_duplicates(names)

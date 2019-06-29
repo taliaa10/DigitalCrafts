@@ -5,6 +5,4 @@ numbers = [1,2,3,4,5]
 def duplicate_array(array):
     print(numbers + numbers)
 
-
-
 duplicate_array(numbers)
