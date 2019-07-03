@@ -13,10 +13,12 @@ with open("todo.json") as todo_file:
 user_input = ""
 
 while user_input != "q":
+
   # TO ADD TASKS
   if user_input == "1":
       title = input("\nTitle: ")
       priority = input("Priority: ").capitalize()
+      
       todo_task = {
           "Title": title,
           "Priority": priority
@@ -26,7 +28,7 @@ while user_input != "q":
         json.dump(todo_list, todo_file)
         
   
-  # TO VIEW AND DELTE TASKS
+  # TO VIEW AND DELETE TASKS
   if user_input == "2":
     with open("todo.json") as todo_file:
       todo_items = json.load(todo_file)
@@ -65,5 +67,8 @@ while user_input != "q":
       task_title = todo_list[i]["Title"]
       priority_value = todo_list[i]["Priority"]
       print(f"{i+1} - {task_title} - {priority_value}")
-      
+
+    if len(todo_list) == 0:
+      print("You have no tasks!")
+
   user_input = input("""\nPress 1 to add task\n\nPress 2 to delete task\n\nPress 3 to view all tasks\n\nPress q to quit\n""")
