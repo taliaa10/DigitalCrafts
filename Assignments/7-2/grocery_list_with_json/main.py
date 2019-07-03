@@ -17,10 +17,14 @@ shopping_lists = []
 
 grocery_items = []
 
-with open("store_shopping_list.json") as store_file:
+shopping_json = "store_shopping_list.json"
+
+grocery_json = "grocery_items.json"
+
+with open(shopping_json) as store_file:
     shopping_lists = json.load(store_file)
 
-with open("grocery_items.json") as grocery_file:
+with open(grocery_json) as grocery_file:
     grocery_items = json.load(grocery_file)
 
 user_input = ""
@@ -47,7 +51,7 @@ while user_input != "q":
         
         shopping_lists.append(store)
 
-        with open("store_shopping_list.json", "w") as store_file:
+        with open(shopping_json, "w") as store_file:
             json.dump(shopping_lists, store_file)
 
         shopping_list_header()
@@ -56,13 +60,13 @@ while user_input != "q":
             store_location = shopping_lists[i]["Location"]
             print(f"{i+1} - {store_name} - {store_location}")
 
+
+
     # TO ADD ITEMS TO YOUR SHOPPING LISTS
     if user_input == "2":
         shopping_list_number = int(input("Enter the shoppinng list number to add items to: "))
         
         shopping_list_to_add_items = shopping_lists[shopping_list_number - 1]
-        
-        
 
         name = input("\nItem: ").title()
         price = float(input("Price: "))
@@ -76,13 +80,10 @@ while user_input != "q":
 
         grocery_items.append(grocery_item)
 
-
-        with open("grocery_items.json", "w") as grocery_file:
+        with open(grocery_json, "w") as grocery_file:
             json.dump(grocery_items, grocery_file)
 
         # grocery = GroceryItem(name, price, quantity)
-        
-        
         
         # shopping_list = ShoppingList(name, address)
 
@@ -105,6 +106,7 @@ while user_input != "q":
     #         if index_to_delete == shopping_lists[i]:
     #             del shopping_lists[i]
 
+
     # TO VIEW STORES
     if user_input == "3":
         shopping_list_header()
@@ -118,7 +120,6 @@ while user_input != "q":
 
     # TO VIEW ALL GROCERY ITEMS
     if user_input == "4":    
-        # grocery_list_item = shopping_list_to_add_items.grocery_items
         
         grocery_list_header()
         for i in range(0, len(grocery_items)):
@@ -126,7 +127,5 @@ while user_input != "q":
             grocery_price = grocery_items[i]["Price"]
             grocery_quantity = grocery_items[i]["Quantity"]
             print (f"{grocery_name} - ${grocery_price:,.2f} - {grocery_quantity}")
-
-
     
     user_input = input("""\nPress 1 to add shopping list\nPress 2 to add grocery items\nPress 3 to view all shopping list\nPress 4 to view all items\nPress q to quit\n""")
