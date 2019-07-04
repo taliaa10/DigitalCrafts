@@ -1,7 +1,5 @@
 import json
 
-
-
 shopping_lists = []
 
 shopping_json = "store_shopping_list.json"
@@ -12,12 +10,9 @@ with open(shopping_json) as store_file:
     shopping_lists = json.load(store_file)
 
 def menu():
-    print("1) Add a Shopping List")
-    print("2) Add a Grocery Item to Shopping List")
-    print("3) Delete a Shopping List")
-    print("4) Press q to quit")
+    print("\n1) Add a Shopping List\t\t2) Add a Grocery Item\n3) View All Grocery Items\t4) Press 4 to quit")
 
-
+# HEADERS
 def shopping_list_header():
     print("\n{:*^30}".format(" Shopping List "))
     print('{:=^30}'.format(""))
@@ -25,6 +20,16 @@ def shopping_list_header():
 def grocery_list_header():
     print("\n{:*^30}".format(" Grocery List "))
     print('{:=^30}'.format(""))
+
+def display_all_shopping_lists():
+    shopping_list_header()
+    for i in range(0, len(shopping_lists)):
+        store_name = shopping_lists[i]["name"]
+        store_location = shopping_lists[i]["address"]
+        print(f"{i+1} - {store_name} - {store_location}")
+    
+    if len(shopping_lists) == 0:
+        print("Your shopping list is empty")
 
 def add_shopping_list():
     name = input("\nStore: ").title()
@@ -48,7 +53,7 @@ def save_shopping_list():
 
 def add_grocery_item_to_shopping_list():
     display_all_shopping_lists()
-    shopping_list_index = int(input("Enter the shoppinng list number to add items to: ")) - 1
+    shopping_list_index = int(input("\nEnter the shoppinng list number to add items to: ")) - 1
     shopping_list = shopping_lists[shopping_list_index]
     # take input for grocery item
     name = input("\nItem: ").title()
@@ -59,42 +64,25 @@ def add_grocery_item_to_shopping_list():
     shopping_list["grocery_items"].append(grocery_item)
     save_shopping_list()
 
-def display_all_shopping_lists():
-    shopping_list_header()
-    for i in range(0, len(shopping_lists)):
-        store_name = shopping_lists[i]["name"]
-        store_location = shopping_lists[i]["address"]
-        print(f"{i+1} - {store_name} - {store_location}")
-    
-    if len(shopping_lists) == 0:
-        print("Your shopping list is empty")
+def display_all_grocery_items():
+    # ask user which shopping list they would like to view
+    shopping_list_index = int(input("\nWhich shopping list do you want to view: ")) - 1
+    shopping_list = shopping_lists[shopping_list_index]
+    grocery_list_header()
+    print(f"{shopping_list['name']} - {shopping_list['address']}")
+    grocery_info = shopping_list["grocery_items"]
+    for i in grocery_info:
+        print(f"{i['name']}\t${i['price']:0,.2f}\t{i['quantity']}")
+    if len(grocery_info) == 0:
+        print("You have not items in this list")
 
-menu()
-
-while user_input != "q":
-    user_input = input("Enter your choice: ")
-    # TO CREATE A SHOPPING LIST
+while user_input != "4":
+    display_all_shopping_lists()
+    menu()
+    user_input = input("\nEnter your choice: ")
     if user_input == "1":
         add_shopping_list()
-
-
-    # TO ADD ITEMS TO YOUR SHOPPING LISTS
     if user_input == "2":
         add_grocery_item_to_shopping_list()
-
-
-    # TO VIEW STORES
     elif user_input == "3":
-        display_all_shopping_lists()
-
-    # TO VIEW ALL GROCERY ITEMS
-    # if user_input == "4":    
-        
-    #     grocery_list_header()
-    #     for i in range(0, len(grocery_items)):
-    #         grocery_name = grocery_items[i]["Item"]
-    #         grocery_price = grocery_items[i]["Price"]
-    #         grocery_quantity = grocery_items[i]["Quantity"]
-    #         print (f"{grocery_name} - ${grocery_price:,.2f} - {grocery_quantity}")
-    
-    # user_input = input("""\nPress 1 to add shopping list\nPress 2 to add grocery items\nPress 3 to view all shopping list\nPress 4 to view all items\nPress q to quit\n""")
+        display_all_grocery_items()
