@@ -18,7 +18,7 @@ def shopping_list_header():
     print('{:=^30}'.format(""))
 
 def grocery_list_header():
-    print("\n{:*^30}".format(" Grocery List "))
+    print("\n{:*^30}".format(" Shopping Items "))
     print('{:=^30}'.format(""))
 
 def display_all_shopping_lists():
@@ -66,18 +66,33 @@ def add_grocery_item_to_shopping_list():
 
 def display_all_grocery_items():
     # ask user which shopping list they would like to view
-    shopping_list_index = int(input("\nWhich shopping list do you want to view: ")) - 1
+    shopping_list_index = int(input("Which shopping list do you want to view: ")) - 1
     shopping_list = shopping_lists[shopping_list_index]
     grocery_list_header()
-    print(f"{shopping_list['name']} - {shopping_list['address']}")
+    print((f"{shopping_list['name']} - {shopping_list['address']}").center(30))
+    print('{:-^30}'.format(""))
+    print("Item\tPrice\tQty.\tTotal")
+    print('{:-^30}'.format(""))
     grocery_info = shopping_list["grocery_items"]
+    prices = []
     for i in grocery_info:
-        print(f"{i['name']}\t${i['price']:0,.2f}\t{i['quantity']}")
+        total_item_price = i['price'] * i['quantity']
+        prices.append(total_item_price)
+        print(f"{i['name']}\t${i['price']:0,.2f}\t{i['quantity']}\t${total_item_price:0,.2f}")
+    print('{:=^30}'.format(""))
+    qty_sum = []
+    for i in grocery_info:
+        qty_sum.append(i['quantity'])
+    print(f"Total Items: {sum(qty_sum)}")
+    print(f"Total Price: ${sum(prices):0,.2f}")
+
+    
     if len(grocery_info) == 0:
         print("You have not items in this list")
 
+display_all_shopping_lists()
+
 while user_input != "4":
-    display_all_shopping_lists()
     menu()
     user_input = input("\nEnter your choice: ")
     if user_input == "1":
