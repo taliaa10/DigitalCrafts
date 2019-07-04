@@ -1,1 +1,1 @@
-[{"Store": "Walmart", "Location": "123 Cherry Lane"}, {"Store": "Kroger", "Location": "356 Pearland Pkwy"}]
+[{"name": "Walmart", "address": "123 Cherry Lane", "grocery_items": [{"name": "Milk", "price": 2.0, "quantity": 4}]}, {"name": "Kroger", "address": "453 Nathan Rd", "grocery_items": []}, {"name": "Sprout'S", "address": "123 Pearland", "grocery_items": []}, {"name": "Test", "address": "Test", "grocery_items": []}]
