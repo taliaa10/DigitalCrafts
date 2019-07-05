@@ -40,7 +40,7 @@ def add_shopping_list():
     shopping_list = {"name": name, "address": address, "grocery_items": []}
     shopping_lists.append(shopping_list)
     # save shopping list as JSON data
-    # save_shopping_list()
+    save_shopping_list()
 
 def save_shopping_list():
     with open(shopping_json, "w") as store_file:
@@ -119,8 +119,7 @@ def remove_shopping_item():
         if item_name_to_remove == grocery_info[i]["name"]:
             del(grocery_info[i])
             break
-
-# MAKE DELETES UPDATE JSON FILE
+    save_shopping_list()
 
     grocery_list_header()
     print((f"{shopping_list['name']} - {shopping_list['address']}").center(30))
@@ -156,7 +155,9 @@ while user_input != "5":
         add_shopping_list()
     if user_input == "2":
         add_grocery_item_to_shopping_list()
+    if user_input == "3":
+        display_all_grocery_items()
     if user_input == "4":
         remove_shopping_item()
-    elif user_input == "3":
-        display_all_grocery_items()
+    elif user_input == "5":
+        print("\n\nHappy Shopping! ☺\n\n")
