@@ -15,6 +15,7 @@ todays_file = (f"{todays_date}.json")
 table_lists = []
 closing_tables_list = []
 occupied_tables = []
+temp_table_list = []
 
 
 
@@ -70,31 +71,46 @@ def book_table():
     table_booked_index.occupied = True
     table_booked_index.start_date_time = nowdatetime
     # table_booked_index.end_date_time = 0
-    occupied_tables.append(table_booked_index.__dict__)
+    # for i in range(len(table_lists)):
+    #     print(i)
+    pop_table_booked = table_lists.pop(table_booked_index)
+    # print(table_booked_index)
+    # occupied_tables.append(pop_table_booked.__dict__)
     print("\nOCCUPIED TABLES")
     print(occupied_tables)
+    print("\nTEMP TABLE LIST")
+    print(temp_table_list)
     print("\nCLOSING TABLES")
     print(closing_tables_list)
-    save_occupied_tables()
+    # print(table_lists.__dict__)
+    # save_occupied_tables()
 
 
 def close_table():
     book_table_index = int(input("Enter table number to close: ")) - 1
     table_booked_index = table_lists[book_table_index]
     for table in range(0, len(occupied_tables)):
-        
+    # this will be range of occ list. (same)
         
         
         if occupied_tables[table]["pool_table_number"] == book_table_index+1 and occupied_tables[table]["occupied"] == 'Occupied' or occupied_tables[table]["occupied"] == True:
-
-            closing_tables_list.append(occupied_tables[table])
-
-            occupied_tables[table]["end_date_time"] = nowdatetime
-            occupied_tables[table]["occupied"] = False
-            
-            # table_booked_index.start_date_time = ''
+            # closing_tables_list will be temp_table_list
+            temp_table_list.append(occupied_tables[table])
             del(occupied_tables[table])
-            break
+            # break
+    for table in range(0, len(temp_table_list)):
+        temp_table_info = temp_table_list[table]
+
+        temp_table_info["end_date_time"] = nowdatetime
+        temp_table_info["occupied"] = False
+
+        print(temp_table_info)
+            # occupied_tables[table]["end_date_time"] = nowdatetime
+            # occupied_tables[table]["occupied"] = False
+            # # occupied_tables[table]["start_date_time"] = ''
+            
+            # # table_booked_index.start_date_time = ''
+
             # ABOVE = TO DUMPING TO JSON FIRST FIRST THEN REMOVE START TIME
             # closing_tables_list[table]["start_date_time"] = ''
         
@@ -109,11 +125,13 @@ while user_input != 3:
         book_table()
     if user_input == 2:
         close_table()
-        save_closed_tables()
-        save_occupied_tables()
+        # save_closed_tables()
+        # save_occupied_tables()
     if user_input == 4:
         print("\nOCCUPIED TABLES")
         print(occupied_tables)
+        print("\nTEMP TABLE LIST")
+        print(temp_table_list)
         print("\nCLOSING TABLES")
         print(closing_tables_list)
     elif user_input == 3:
