@@ -9,10 +9,14 @@ import errno
 
 nowdatetime = datetime.now().strftime('%I:%M %p')
 todays_date = datetime.now().strftime('%m-%d-%Y')
+# STRIP TIME FORMAT AND CONVERT TIME VALUES TO INTS
+
+
+
 # NEED CURRENT TIME TO GET TOTAL TIME PLAYED
 app_name = " CoogPool "
 
-todays_file = (f"table-reports/{todays_date}.json")
+todays_file = (f"{todays_date}.json")
 
 table_lists = []
 closing_tables_list = []
@@ -20,9 +24,14 @@ occupied_tables = []
 temp_table_list = []
 copy_table_list = []
 
-
-
 user_input = ""
+
+
+with open(f"occupied_tables.json") as f:
+        occupied_tables = json.load(f)
+
+with open(todays_file) as f:
+    closing_tables_list = json.load(f)
 
 def save_occupied_tables():
     with open("occupied_tables.json", "w") as f:
@@ -30,7 +39,7 @@ def save_occupied_tables():
 
 def save_closed_tables():
     with open(todays_file, "w") as f:
-        json.dump(closing_tables_list, f) 
+        json.dump(closing_tables_list, f)
 
 def menu():
     print(f"\n1 - Book Table\t\t2 - Close Table\t\t3 - Exit {app_name.strip(' ')}")
@@ -41,7 +50,7 @@ def view_all_tables_header():
     print("TABLE NUMBER\tAVAILABILITY\tSTART TIME\tTIME PLAYED")
     print(f'{"":-^65}')
 
-# def creating_tables_intial_12_tables():
+
 tables_created = 1
 while tables_created < 13:
     p = PoolTable(tables_created)
@@ -50,26 +59,38 @@ while tables_created < 13:
 
 # creating_tables_intial_12_tables()
 
-def new_file_generator_for_closed_tables_report():
-    if os.path.exists(os.path.dirname(todays_file)) == False:
-        try:
-            os.makedirs(os.path.dirname(todays_file))
-        except OSError as exc:
-            if exc.errno != errno.EEXIST:
-                raise
+# def new_file_generator_for_closed_tables_report():
+    # if os.path.exists(os.path.dirname(todays_file)) == False:
+    #     try:
+    #         os.makedirs(os.path.dirname(todays_file))
+    #     except OSError as exc:
+    #         if exc.errno != errno.EEXIST:
+    #             raise
 
-    with open(todays_file, 'w+') as f:
-        f.write("[]")
+    # with open(todays_file, 'w+') as f:
+    #     f.write("[]")
 
 def view_all_tables():
     view_all_tables_header()
     
     for table in range(0, len(table_lists)):
         table_info = table_lists[table]
+        
+        
+        for table in range(0, len(occupied_tables)):
+            occ_info = occupied_tables[table]
+            if table_info.__dict__["pool_table_number"] == occ_info["pool_table_number"]:
+
+                table_info.__dict__["occupied"] = occ_info["occupied"]
+                table_info.__dict__["start_date_time"] = occ_info["start_date_time"]
+                table_info.__dict__["occupied"] = occ_info["occupied"]
+
+        
         if table_info.occupied == False:
             table_info.occupied = "Not Occupied"
         elif table_info.occupied == True:
             table_info.occupied = "Occupied"
+
         
         print(f"Table {table_info.pool_table_number} \t{table_info.occupied} \t {table_info.start_date_time} \t{table_info.total_time_played}")
 
@@ -79,7 +100,6 @@ def book_table():
     table_booked_index = table_lists[book_table_index]
     table_booked_index.occupied = True
     table_booked_index.start_date_time = nowdatetime
-    # table_booked_index.end_date_time = 0
     occupied_tables.append(table_booked_index.__dict__)
     save_occupied_tables()
 
@@ -95,9 +115,6 @@ def close_table():
 
 
     # further down below in the input section the deep copy will run to take the table to be closed and turn it into a new
-
-
-
 
 
 def update_closing_tables():
@@ -118,8 +135,9 @@ def update_closing_tables():
         del(copy_table_list[table])
 
 while user_input != 3:
-    new_file_generator_for_closed_tables_report()
+
     view_all_tables()
+    
     menu()
     user_input = int(input("\nEnter an option: "))
     if user_input == 1:
@@ -129,5 +147,7 @@ while user_input != 3:
         close_table()
         copy_table_list = copy.deepcopy(temp_table_list)
         update_closing_tables()
+        save_closed_tables()
+        print(closing_tables_list)
     elif user_input == 3:
         print(f"\n\nThank you for using {app_name.strip(' ')}! ☺\n")
