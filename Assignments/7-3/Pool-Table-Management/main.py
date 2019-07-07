@@ -57,7 +57,7 @@ def new_file_generator_for_closed_tables_report():
         except OSError as exc:
             if exc.errno != errno.EEXIST:
                 raise
-                
+
     with open(todays_file, 'w+') as f:
         f.write("[]")
 
@@ -101,7 +101,7 @@ def close_table():
 
 
 def update_closing_tables():
-
+    save_occupied_tables()
     #updating objects in original table list back to default values
     for table in range(0, len(table_lists)):
         table_info = table_lists[table]
@@ -116,9 +116,6 @@ def update_closing_tables():
         closing_tables_list.append(copy_table_list[table])
         del(temp_table_list[table])
         del(copy_table_list[table])
-
-        
-
 
 while user_input != 3:
     new_file_generator_for_closed_tables_report()
