@@ -4,17 +4,21 @@ import json
 from datetime import datetime
 from pool_table import PoolTable
 import os.path
+import copy
+import errno
 
 nowdatetime = datetime.now().strftime('%I:%M %p')
 todays_date = datetime.now().strftime('%m-%d-%Y')
 # NEED CURRENT TIME TO GET TOTAL TIME PLAYED
 app_name = " CoogPool "
 
-todays_file = (f"{todays_date}.json")
+todays_file = (f"table-reports/{todays_date}.json")
 
 table_lists = []
 closing_tables_list = []
 occupied_tables = []
+temp_table_list = []
+copy_table_list = []
 
 
 
@@ -46,10 +50,16 @@ while tables_created < 13:
 
 # creating_tables_intial_12_tables()
 
-def new_file_generator():
-    if os.path.exists(todays_file) == False:
-        with open(todays_file, 'w+') as f:
-            f.write("[]")
+def new_file_generator_for_closed_tables_report():
+    if os.path.exists(os.path.dirname(todays_file)) == False:
+        try:
+            os.makedirs(os.path.dirname(todays_file))
+        except OSError as exc:
+            if exc.errno != errno.EEXIST:
+                raise
+                
+    with open(todays_file, 'w+') as f:
+        f.write("[]")
 
 def view_all_tables():
     view_all_tables_header()
@@ -71,50 +81,56 @@ def book_table():
     table_booked_index.start_date_time = nowdatetime
     # table_booked_index.end_date_time = 0
     occupied_tables.append(table_booked_index.__dict__)
-    print("\nOCCUPIED TABLES")
-    print(occupied_tables)
-    print("\nCLOSING TABLES")
-    print(closing_tables_list)
     save_occupied_tables()
 
 
 def close_table():
-    book_table_index = int(input("Enter table number to close: ")) - 1
-    table_booked_index = table_lists[book_table_index]
+
+    # appending table to close in occ list to temp table
     for table in range(0, len(occupied_tables)):
-        
-        
-        
-        if occupied_tables[table]["pool_table_number"] == book_table_index+1 and occupied_tables[table]["occupied"] == 'Occupied' or occupied_tables[table]["occupied"] == True:
-
-            closing_tables_list.append(occupied_tables[table])
-
-            occupied_tables[table]["end_date_time"] = nowdatetime
-            occupied_tables[table]["occupied"] = False
-            
-            # table_booked_index.start_date_time = ''
+        if occupied_tables[table]["pool_table_number"] == pool_table_number and occupied_tables[table]["occupied"] == 'Occupied' or occupied_tables[table]["occupied"] == True:
+            temp_table_list.append(occupied_tables[table])
             del(occupied_tables[table])
             break
-            # ABOVE = TO DUMPING TO JSON FIRST FIRST THEN REMOVE START TIME
-            # closing_tables_list[table]["start_date_time"] = ''
+
+
+    # further down below in the input section the deep copy will run to take the table to be closed and turn it into a new
+
+
+
+
+
+def update_closing_tables():
+
+    #updating objects in original table list back to default values
+    for table in range(0, len(table_lists)):
+        table_info = table_lists[table]
+        if table_info.pool_table_number == pool_table_number:
+            table_info.occupied = False
+            table_info.start_date_time = ""
+
+    # updating new values in copy list to append to closing table list
+    for table in range(0, len(copy_table_list)):
+        copy_table_list[table]["end_date_time"] = nowdatetime
+        copy_table_list[table]["occupied"] = False
+        closing_tables_list.append(copy_table_list[table])
+        del(temp_table_list[table])
+        del(copy_table_list[table])
+
         
 
 
 while user_input != 3:
-    new_file_generator()
+    new_file_generator_for_closed_tables_report()
     view_all_tables()
     menu()
     user_input = int(input("\nEnter an option: "))
     if user_input == 1:
         book_table()
     if user_input == 2:
+        pool_table_number = int(input("Enter table number to close: "))
         close_table()
-        save_closed_tables()
-        save_occupied_tables()
-    if user_input == 4:
-        print("\nOCCUPIED TABLES")
-        print(occupied_tables)
-        print("\nCLOSING TABLES")
-        print(closing_tables_list)
+        copy_table_list = copy.deepcopy(temp_table_list)
+        update_closing_tables()
     elif user_input == 3:
         print(f"\n\nThank you for using {app_name.strip(' ')}! ☺\n")
