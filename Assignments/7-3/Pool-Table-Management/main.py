@@ -9,15 +9,12 @@ import errno
 
 nowdatetime = datetime.now().strftime('%I:%M %p')
 todays_date = datetime.now().strftime('%m-%d-%Y')
-# STRIP TIME FORMAT AND CONVERT TIME VALUES TO INTS
 
-
-
-# NEED CURRENT TIME TO GET TOTAL TIME PLAYED
 app_name = " CoogPool "
-hourly_rate = 20
+hourly_rate = 30
 
 todays_file = (f"{todays_date}.json")
+todays_file_txt = (f"{todays_date}.txt")
 
 table_lists = []
 closing_tables_list = []
@@ -31,7 +28,7 @@ nowdatetime = datetime.now().strftime('%I:%M %p')
 todays_date = datetime.now().strftime('%m-%d-%Y')
 
 with open(f"occupied_tables.json") as f:
-        occupied_tables = json.load(f)
+    occupied_tables = json.load(f)
 
 with open(todays_file) as f:
     closing_tables_list = json.load(f)
@@ -90,12 +87,16 @@ def view_all_tables():
 
             time_diff = strip_current_time - strip_start_time
 
+            time_diff_strip = datetime.strptime(str(time_diff), '%H:%M:%S')
+
+
+
             if table_info.__dict__["pool_table_number"] == occ_info["pool_table_number"]:
 
                 table_info.__dict__["occupied"] = occ_info["occupied"]
                 table_info.__dict__["start_date_time"] = occ_info["start_date_time"]
                 table_info.__dict__["occupied"] = occ_info["occupied"]
-                table_info.__dict__["total_time_played"] = str(time_diff)
+                table_info.__dict__["total_time_played"] = (time_diff_strip).strftime('%H:%M')
 
 
         if table_info.occupied == False:
@@ -131,6 +132,7 @@ def close_table():
 
 
 def update_closing_tables():
+    copy_table_list = copy.deepcopy(temp_table_list)
     save_occupied_tables()
     #updating objects in original table list back to default values
     for table in range(0, len(table_lists)):
@@ -152,7 +154,9 @@ def update_closing_tables():
 
         time_diff = strip_end_time - strip_start_time
 
-        copy_table_list[table]["total_time_played"] = str(time_diff)
+        time_diff_strip = datetime.strptime(str(time_diff), '%H:%M:%S')
+
+        copy_table_list[table]["total_time_played"] = (time_diff_strip).strftime('%H:%M')
 
         # calculate total cost
         total_time_played_minutes = float(str(time_diff)[2:4]) / 60
@@ -165,7 +169,23 @@ def update_closing_tables():
         del(temp_table_list[table])
         del(copy_table_list[table])
 
+def create_text_file_report_of_closed_tables_for_the_day():
+    with open(todays_file_txt, 'w') as f:
+        f.write(f"\n{app_name:*^30}")
+        f.write(f'\n{"":=^30}')
+        f.write(f'\nTOTAL\nTIME \tTOTAL COST')
+        f.write(f'\n{"":-^30}')
+        cost_sum = []
+        for i in range(0, len(closing_tables_list)):
+            total_time_played = closing_tables_list[i]['total_time_played']
+            bare_cost = float(closing_tables_list[i]['cost'].replace('$', ''))
+            f.write(f"\n{total_time_played} \t${bare_cost:0,.2f}")
+            cost_sum.append(bare_cost)
+        f.write(f'\n{"":=^30}')
+        f.write(f"\ntime \t${sum(cost_sum):0,.2f}")
+
 while user_input != 3:
+    
     view_all_tables()
     menu()
     user_input = int(input("\nEnter an option: "))
@@ -174,9 +194,8 @@ while user_input != 3:
     if user_input == 2:
         pool_table_number = int(input("Enter table number to close: "))
         close_table()
-        copy_table_list = copy.deepcopy(temp_table_list)
         update_closing_tables()
         save_closed_tables()
-        # print(closing_tables_list)
+        create_text_file_report_of_closed_tables_for_the_day()
     elif user_input == 3:
         print(f"\n\nThank you for using {app_name.strip(' ')}! ☺\n")
