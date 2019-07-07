@@ -15,6 +15,7 @@ todays_date = datetime.now().strftime('%m-%d-%Y')
 
 # NEED CURRENT TIME TO GET TOTAL TIME PLAYED
 app_name = " CoogPool "
+hourly_rate = 20
 
 todays_file = (f"{todays_date}.json")
 
@@ -26,6 +27,8 @@ copy_table_list = []
 
 user_input = ""
 
+nowdatetime = datetime.now().strftime('%I:%M %p')
+todays_date = datetime.now().strftime('%m-%d-%Y')
 
 with open(f"occupied_tables.json") as f:
         occupied_tables = json.load(f)
@@ -76,16 +79,25 @@ def view_all_tables():
     for table in range(0, len(table_lists)):
         table_info = table_lists[table]
         
-        
+        # if table is occupied update the default pool table data with the occupied table data
         for table in range(0, len(occupied_tables)):
             occ_info = occupied_tables[table]
+
+            # getting time difference for total time played
+            strip_start_time = datetime.strptime(occ_info["start_date_time"], '%I:%M %p')
+
+            strip_current_time = datetime.strptime(nowdatetime, '%I:%M %p')
+
+            time_diff = strip_current_time - strip_start_time
+
             if table_info.__dict__["pool_table_number"] == occ_info["pool_table_number"]:
 
                 table_info.__dict__["occupied"] = occ_info["occupied"]
                 table_info.__dict__["start_date_time"] = occ_info["start_date_time"]
                 table_info.__dict__["occupied"] = occ_info["occupied"]
+                table_info.__dict__["total_time_played"] = str(time_diff)
 
-        
+
         if table_info.occupied == False:
             table_info.occupied = "Not Occupied"
         elif table_info.occupied == True:
@@ -100,6 +112,7 @@ def book_table():
     table_booked_index = table_lists[book_table_index]
     table_booked_index.occupied = True
     table_booked_index.start_date_time = nowdatetime
+    table_booked_index.total_time_played = ''
     occupied_tables.append(table_booked_index.__dict__)
     save_occupied_tables()
 
@@ -125,19 +138,35 @@ def update_closing_tables():
         if table_info.pool_table_number == pool_table_number:
             table_info.occupied = False
             table_info.start_date_time = ""
+            table_info.total_time_played = ""
 
     # updating new values in copy list to append to closing table list
     for table in range(0, len(copy_table_list)):
         copy_table_list[table]["end_date_time"] = nowdatetime
         copy_table_list[table]["occupied"] = False
+
+        #getting total time = end - start time
+        strip_start_time = datetime.strptime(copy_table_list[table]["start_date_time"], '%I:%M %p')
+
+        strip_end_time = datetime.strptime(copy_table_list[table]["end_date_time"], '%I:%M %p')
+
+        time_diff = strip_end_time - strip_start_time
+
+        copy_table_list[table]["total_time_played"] = str(time_diff)
+
+        # calculate total cost
+        total_time_played_minutes = float(str(time_diff)[2:4]) / 60
+
+        cost = total_time_played_minutes * hourly_rate
+
+        copy_table_list[table]["cost"] = (f"${cost:0,.2f}")
+
         closing_tables_list.append(copy_table_list[table])
         del(temp_table_list[table])
         del(copy_table_list[table])
 
 while user_input != 3:
-
     view_all_tables()
-    
     menu()
     user_input = int(input("\nEnter an option: "))
     if user_input == 1:
@@ -148,6 +177,6 @@ while user_input != 3:
         copy_table_list = copy.deepcopy(temp_table_list)
         update_closing_tables()
         save_closed_tables()
-        print(closing_tables_list)
+        # print(closing_tables_list)
     elif user_input == 3:
         print(f"\n\nThank you for using {app_name.strip(' ')}! ☺\n")
