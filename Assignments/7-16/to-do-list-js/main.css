@@ -1,0 +1,97 @@
+* {
+    font-family: Lato;
+    background-color: #eee;
+}
+
+body {
+    margin-left: 50px;
+}
+
+.enter-task-item {
+    margin-bottom: 10px;
+}
+
+h4 {
+    margin-bottom: 10px;
+}
+
+li {
+    list-style: none;
+    padding: 10px;
+    margin-left: -50px;
+    position: relative;
+}
+
+li span {
+    /* background-color: black;
+    width: 600px; */
+    /* margin: 50px; */
+    /* margin-right: 100px; */
+    display: inline-block;
+    width: 200px;
+    /* float: left; */
+}
+
+.completed-tasks-list-div span {
+    /* color: rgb(136, 136, 136); */
+}
+
+.task-section {
+    /* float: left; */
+    margin-right: 100px;
+    border-radius: 5px solid black;
+    width: 400px;
+}
+
+button {
+    background-color: rgb(189, 0, 0); /* Green */
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    margin-top: 20px;
+    width: 70px;
+  }
+
+button:hover {
+    background-color: rgb(135, 0, 0); /* Green */
+}
+
+#enter-task-button {
+    background-color: rgb(0, 176, 20); /* Green */
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    width: 70px;
+}
+
+#enter-task-button:hover {
+    background-color: rgb(0, 125, 15); /* Green */
+}
+
+.checkbox {
+/* position: absolute; */
+/* top: 20px; */
+/* left: 50px; */
+margin-right: 10px;
+margin-top: 5px;
+height: 25px;
+width: 25px;
+}
+
+.textbox {
+    height: 30px;
+    width: 200px;
+    border-radius: 3px;
+    border: 1px solid lightgrey;
+    margin-right: 30px; 
+}
