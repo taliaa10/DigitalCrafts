@@ -1,0 +1,84 @@
+*,
+*::after,
+*::before {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+* {
+    font-family: Lato;
+    color: darkslategrey
+}
+
+body {
+    box-sizing: border-box;
+}
+
+.header {
+    height: 80vh;
+    background-image: linear-gradient(to right bottom, rgba(255, 185, 0, .8), rgba(255, 119, 48, .8)), url(images/food.jpg);
+    background-size: cover;
+    background-position: top;
+    position: relative;
+}
+
+.search-section {
+    padding-top: 20px;
+    /* margin-top: 50px; */
+}
+
+.search-div {
+    margin-left: 400px;
+}
+
+#search-dropdown {
+    height: 35px;
+    width: 150px;
+    border-radius: 2px;
+    border: 1px solid darkgrey;
+    font-size: 18px;
+}
+
+.menu-section {
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 60px;
+}
+
+
+.course-title {
+    border-bottom: 1px solid rgb(198, 198, 198);
+    padding-bottom: 20px;
+}
+
+.dish-items {
+
+}
+
+.dish-item {
+    display: flex;
+    padding: 20px;
+}
+
+.dish-description {
+    /* width: 10px; */
+}
+
+img {
+    height: 100%;
+    border-radius: 4px;
+}
+
+#search-button {
+    height: 35px;
+    width: 70px;
+    border-radius: 4px;
+}
+
+.food-description {
+    padding-left: 20px;
+}
+
+.dish-description, .price {
+    padding: 35px;
+}
