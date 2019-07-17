@@ -13,6 +13,7 @@ enterTaskButton.addEventListener('click', function() {
 
     let taskName = taskNameTextbox.value
 
+    // COMPLETE TASK
     let checkbox = document.createElement("input")
     checkbox.setAttribute("type", "checkbox")
     checkbox.setAttribute("class", "checkbox")
@@ -34,7 +35,7 @@ enterTaskButton.addEventListener('click', function() {
     removeButton.innerHTML = "Remove"
     removeButton.addEventListener("click", function() {
 
-        pendingTasksListDiv.removeChild(pendingTasksListDiv.childNodes[0])
+        listItemDiv.remove()
     })
 
     listItemDiv.appendChild(checkbox)

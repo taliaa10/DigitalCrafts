@@ -1,10 +1,11 @@
 * {
     font-family: Lato;
-    background-color: #eee;
 }
 
 body {
-    margin-left: 50px;
+    /* margin-left: 50px; */
+    margin: 0 auto;
+    width: 30%;
 }
 
 .enter-task-item {
@@ -13,6 +14,10 @@ body {
 
 h4 {
     margin-bottom: 10px;
+}
+
+ul {
+    margin-left: 20px;
 }
 
 li {
@@ -32,9 +37,6 @@ li span {
     /* float: left; */
 }
 
-.completed-tasks-list-div span {
-    /* color: rgb(136, 136, 136); */
-}
 
 .task-section {
     /* float: left; */
