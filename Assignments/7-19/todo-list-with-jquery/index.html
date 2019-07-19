@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+
+    <link rel="stylesheet" href="main.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+    <script>
+
+    </script>
+
+    <title>jQuery Todo List</title>
+</head>
+<body>
+    <header class="header">
+        <h1 class="Reminders">List</h1>
+    </header>
+
+
+    <!-- <div class="container">
+        <div class="round">
+          <input type="checkbox" id="checkbox" />
+          <label for="checkbox"></label>
+        </div>
+      </div> -->
+
+
+    <div class="enter-task-item">
+        <!-- <h4 id="task-name">Enter task</h4> -->
+        
+        <input class="textbox" type="text" id="task-item-textbox" placeholder="Enter task item">
+    </div>
+
+<!-- PENDING TASKS -->
+    <button class="accordion"><h3>Pending Tasks</h3></button>
+    <section class="task-section">
+            <ul id="pending-tasks-list-div" class="sortable">
+                <!-- <li class="list-item">
+                    <input class="checkbox" type="checkbox">
+                    <span>Wash the dog</span>
+                    <button id="remove-task-button">Remove</button>
+                </li> -->
+            </ul>
+    </section>
+<!-- COMPLETED TASKS -->
+<button class="accordion"><h3>Completed Tasks</h3></button>
+    <section class="task-section">
+            <ul id="completed-tasks-list-div" class="sortable">
+                <!-- <li class="list-item">
+                    <input class="checkbox" type="checkbox" checked>
+                    <span>Feed the cat</span>
+                    <button id="remove-task-button">Remove</button>
+                </li> -->
+            </ul>
+    </section>
+    
+</body>
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script src="app.js"></script>
+</html>
