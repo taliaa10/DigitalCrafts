@@ -67,9 +67,9 @@ function showDetails(imdbid) {
 
         
         let movieDetails =
-            `<div>
-                <h2>${moviesDetails.Title}</h2>
-                <img src='${moviesDetails.Poster == "N/A" ? "placeholder.png" : moviesDetails.Poster}'>
+            `<div class='movie-details__stuff'>
+                <h2 class='movie-details__title'>${moviesDetails.Title}</h2>
+                <img src='${moviesDetails.Poster == "N/A" ? "placeholder.png" : moviesDetails.Poster}' class='movie-details-img'>
                 <p>${moviesDetails.Plot}</p>
             </div>`
 
