@@ -3,59 +3,86 @@ let movieDetailsDiv = document.getElementById('movie-details')
 let movieListTitles = document.querySelectorAll('.movie-list__title')
 let searchbox = document.getElementById('searchbox')
 
-searchbox.focus()
 
-document.addEventListener('keypress', (e) => {
-    if (e.keyCode === 13 || e.which === 13) {
-        searchbox.select().focus()
+let dataController = (() => {
+
+    return {
+        //
     }
+
 })
 
-searchbox.addEventListener('keypress', (e) => {
-    if (e.keyCode === 13 || e.which === 13) {
+
+let UIController = (() => {
+
+
+
+})
+
+
+let controller = (() => {
+
+    let setUpEventListeners = () => {
+
+        searchbox.focus()
+
+        document.addEventListener('keypress', (e) => {
+            if (e.keyCode === 13 || e.which === 13) {
+                searchbox.select().focus()
+            }
+        })
+        searchbox.addEventListener('keypress', (e) => {
+            if (e.keyCode === 13 || e.which === 13) {
+                searchMovies()
+            }
+        })
+        searchbox.addEventListener('click', () => {
+            searchbox.select()
+        })
+    }
+
+
+    function searchMovies() {
         let searchboxValue = searchbox.value
-
-
+    
         let moviesURL = `http://www.omdbapi.com/?s=${searchboxValue}&apikey=b0869d10`
-
-
+    
         let req = new XMLHttpRequest()
         req.open('GET', moviesURL)
         req.addEventListener('load', () => {
             let movies = JSON.parse(event.currentTarget.responseText)
 
+
             let movieItems = movies.Search.map(movie => {
                 return `<div>
-                            
-                            <button id=poster-button onclick = "showDetails('${movie.imdbID}')">
-                             
+                            <a id=poster-button onclick = "showDetails('${movie.imdbID}')">
                             <img src='${movie.Poster == "N/A" ? "placeholder.png" : movie.Poster}' class="movie-list__poster"/>
-                            </button>
-                    
+                            </a>
                             <h2><button onclick = "showDetails('${movie.imdbID}')" class="movie-list__title">
-                            ${movie.Title}
+                            ${movie.Title} (${movie.Year})
                             </button></h2>
                         </div>`
-        
-            
             })
-        
             movieListDiv.innerHTML = movieItems.join('')
-            
-            searchbox.addEventListener('click', () => {
-                searchbox.select()
-            })
-
-
         })
-        
         req.send()
-
     }
-})
+    
+
+
+
+
+    return {
+        init: () => {
+            setUpEventListeners()
+        }
+    }
+
+})()
+
+controller.init()
 
 function showDetails(imdbid) {
-
     
     let movieDetailsURL = `http://www.omdbapi.com/?i=${imdbid}&apikey=b0869d10`
 
@@ -63,12 +90,10 @@ function showDetails(imdbid) {
     detailreq.open('GET', movieDetailsURL)
     detailreq.addEventListener('load', () => {
         let moviesDetails = JSON.parse(event.currentTarget.responseText)
-
-
         
         let movieDetails =
             `<div class='movie-details__stuff'>
-                <h2 class='movie-details__title'>${moviesDetails.Title}</h2>
+                <h2 class='movie-details__title'>${moviesDetails.Title} (${moviesDetails.Year})</h2>
                 <img src='${moviesDetails.Poster == "N/A" ? "placeholder.png" : moviesDetails.Poster}' class='movie-details-img'>
                 <p>${moviesDetails.Plot}</p>
             </div>`
@@ -76,9 +101,12 @@ function showDetails(imdbid) {
             movieDetailsDiv.innerHTML = movieDetails
             console.log(movieDetails)
     })
-
     detailreq.send()
 }
+
+
+
+
 
 
 
