@@ -44,7 +44,7 @@ locationsRef.on('value',(snapshot) => {
 
 
 
-
+// EVENT LISTENERS
 
 
 addAddressTextbox.addEventListener('keypress', e => {
@@ -75,6 +75,13 @@ addStoreBtn.addEventListener('click', () => {
     addAddressTextbox.value = ""
     addLocationTextbox.focus()
 })
+
+
+// if (groceryCategoryTextbox.value !== '') {
+//     groceryCategoryTextbox.addEventListener('keypress', e => {
+//         addGroceryItem(address)
+//     })
+// }
 
 
 
@@ -162,11 +169,11 @@ function deleteLocation(key) {
 
 function addGroceryItem(address) {
     console.log(address)
-    let groceriesRef = database.ref('stores').child('Walmart').set({
+    let groceriesRef = database.ref('locations').child('-Lkgy6Jx0mnefprfGufk').set({
         groceryName: 'bread',
         categoryName: 'food'
     })
-    console.log(groceriesRef)
+    // console.log(groceriesRef)
 }
 
 
