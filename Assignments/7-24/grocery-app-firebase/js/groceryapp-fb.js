@@ -20,77 +20,76 @@ $('.ui.rating')
 
 let addStoreTextbox = document.getElementById('store-name-textbox')
 let addAddressTextbox = document.getElementById('store-address-textbox')
-let displayStoresDiv = document.getElementById('display-stores-div')
+
 let storeAccordion = document.getElementById('store-accordion')
+
 let groceryItemTextbox = document.getElementById('grocery-item-textbox')
 let groceryCategoryTextbox = document.getElementById('grocery-category-textbox')
+
 let addStoreBtn = document.getElementById('add-store-btn')
 
 
 let storesRef = database.ref('stores')
 
-storesRef.on('value',(snapshot) => {
-    let stores = []
+let stores = []
 
-    for(key in snapshot.val()) {
-        let user =snapshot.val()[key]
-        user.key = key
-        stores.push(user)
-    }
+storesRef.on('value',(snapshot) => {
+
+    stores = []
+
+    snapshot.forEach(store => {
+        
+        let storeItem = store.val()
+        let newStore = new Store(storeItem.name, storeItem.address)
+        newStore.storeId = store.key
+        // store.groceryItems = storeItem.groceryItems
+        stores.push(newStore)
+    })
     displayStores(stores)
 })
 
+function addGroceryItem(storeId, obj) {
+
+    let groceryItemTextbox = document.getElementById('grocery-item-textbox')
+    let groceryCategoryTextbox = document.getElementById('grocery-category-textbox')
+
+    console.log(groceryItemTextbox.value)
+    console.log(groceryCategoryTextbox.value)
+
+    
+
+    console.log(storeId)
 
 
+    console.log(obj)
+
+    let store = stores.find(s => s.storeId == storeId)
+
+    
+
+    // let groceryItemName = obj.previousElementSibling.value
 
 
-// EVENT LISTENERS
-
-
-addAddressTextbox.addEventListener('keypress', e => {
-    if (e.keyCode === 13 || e.which === 13) {
-        let addStoreTextboxValue = toTitleCase(addStoreTextbox.value)
-        let addAddressTextboxValue = toTitleCase(addAddressTextbox.value)
-        addStore(addStoreTextboxValue, addAddressTextboxValue)
-        addStoreTextbox.value = ""
-        addAddressTextbox.value = ""
-        addStoreTextbox.focus()
-    }
-})
-
-
-if (addStoreTextbox.value == ''){
-addStoreTextbox.addEventListener('keypress', e => {
-    if (e.keyCode === 13 || e.which === 13) {
-        addAddressTextbox.focus()
-    }
-})
+    
+    // store.addGroceryItem(new GroceryItem(groceryItemName, 'butter'))
+    // storesRef.child(storeId).set(store)
+    // console.log(groceriesRef)
 }
 
-addStoreBtn.addEventListener('click', () => {
-    let addStoreTextboxValue = toTitleCase(addStoreTextbox.value)
-    let addAddressTextboxValue = toTitleCase(addAddressTextbox.value)
-    addStore(addStoreTextboxValue, addAddressTextboxValue)
-    addStoreTextbox.value = ""
-    addAddressTextbox.value = ""
-    addStoreTextbox.focus()
-})
 
 
-// if (groceryCategoryTextbox.value !== '') {
-//     groceryCategoryTextbox.addEventListener('keypress', e => {
-//         addGroceryItem(address)
+// function addStore(store, address) {
+//     console.log(store)
+//     storesRef.push({
+//         name: store,
+//         address: address
 //     })
 // }
 
 
-
-
-function addStore(store, address) {
-    storesRef.push({
-        name: store,
-        address: address
-    })
+function addStore(name, address) {
+    let store = new Store(name, address)
+    storesRef.push(store)
 }
 
 
@@ -98,11 +97,14 @@ function addStore(store, address) {
 
 
 function displayStores(stores) {
+
     let storeItems = stores.map(store => {
+
+    // console.log(store.name)
         return `<div class="title store-title active">
         <i class="dropdown icon"></i>
         ${store.name} - ${store.address}
-        <button class="ui icon button" style="float: right;" onclick='deleteStore("${store.key}")'><i class="trash icon"></i></button>
+        <button class="ui icon button" style="float: right;" onclick='deleteStore("${store.storeId}")'><i class="trash icon"></i></button>
       </div>
       <div class="content">
 
@@ -149,7 +151,7 @@ function displayStores(stores) {
       <div class="ui action input">
       <input type="text" class="grocery-textboxes" id="grocery-category-textbox" placeholder="Category...">
       
-      <button onclick='addGroceryItem("${store.address}")' class="ui icon button teal"><i class="plus square icon"></i></button>
+      <button onclick='addGroceryItem("${store.storeId}")' class="ui icon button teal"><i class="plus square icon"></i></button>
       </div>   
       </div> 
     </div>
@@ -167,15 +169,51 @@ function deleteStore(key) {
 }
 
 
-function addGroceryItem(address) {
-    console.log(address)
-    let groceriesRef = database.ref('stores').child('-Lkgy6Jx0mnefprfGufk').set({
-        groceryName: 'bread',
-        categoryName: 'food'
-    })
-    // console.log(groceriesRef)
+
+
+
+
+
+
+// EVENT LISTENERS
+
+
+addAddressTextbox.addEventListener('keypress', e => {
+    if (e.keyCode === 13 || e.which === 13) {
+        let name = toTitleCase(addStoreTextbox.value)
+        let address = toTitleCase(addAddressTextbox.value)
+        addStore(name, address)
+        console.log(name)
+        addStoreTextbox.value = ""
+        addAddressTextbox.value = ""
+        addStoreTextbox.focus()
+    }
+})
+
+
+if (addStoreTextbox.value == ''){
+addStoreTextbox.addEventListener('keypress', e => {
+    if (e.keyCode === 13 || e.which === 13) {
+        addAddressTextbox.focus()
+    }
+})
 }
 
+addStoreBtn.addEventListener('click', () => {
+    let addStoreTextboxValue = toTitleCase(addStoreTextbox.value)
+    let addAddressTextboxValue = toTitleCase(addAddressTextbox.value)
+    addStore(addStoreTextboxValue, addAddressTextboxValue)
+    addStoreTextbox.value = ""
+    addAddressTextbox.value = ""
+    addStoreTextbox.focus()
+})
+
+
+// if (groceryCategoryTextbox.value !== '') {
+//     groceryCategoryTextbox.addEventListener('keypress', e => {
+//         addGroceryItem(address)
+//     })
+// }
 
 
 

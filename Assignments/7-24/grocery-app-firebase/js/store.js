@@ -6,9 +6,7 @@ class Store {
         this.groceryItems = []
     }
 
-    deleteLocation(store) {
-        console.log(store)
-        // locationsRef.child(location).remove()
-        
+    addGroceryItem(groceryItem) {
+        this.groceryItems.push(groceryItem)
     }
 }
