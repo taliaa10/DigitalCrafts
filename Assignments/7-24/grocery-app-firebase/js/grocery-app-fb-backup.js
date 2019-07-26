@@ -18,26 +18,26 @@ $('.ui.rating')
 ;
 
 
-let addStoreTextbox = document.getElementById('store-name-textbox')
+let addLocationTextbox = document.getElementById('store-name-textbox')
 let addAddressTextbox = document.getElementById('store-address-textbox')
-let displayStoresDiv = document.getElementById('display-stores-div')
+let displayLocationssDiv = document.getElementById('display-locations-div')
 let storeAccordion = document.getElementById('store-accordion')
 let groceryItemTextbox = document.getElementById('grocery-item-textbox')
 let groceryCategoryTextbox = document.getElementById('grocery-category-textbox')
 let addStoreBtn = document.getElementById('add-store-btn')
 
 
-let storesRef = database.ref('stores')
+let locationsRef = database.ref('locations')
 
-storesRef.on('value',(snapshot) => {
-    let stores = []
+locationsRef.on('value',(snapshot) => {
+    let locations = []
 
     for(key in snapshot.val()) {
         let user =snapshot.val()[key]
         user.key = key
-        stores.push(user)
+        locations.push(user)
     }
-    displayStores(stores)
+    displayLocations(locations)
 })
 
 
@@ -49,18 +49,18 @@ storesRef.on('value',(snapshot) => {
 
 addAddressTextbox.addEventListener('keypress', e => {
     if (e.keyCode === 13 || e.which === 13) {
-        let addStoreTextboxValue = toTitleCase(addStoreTextbox.value)
+        let addLocationTextboxValue = toTitleCase(addLocationTextbox.value)
         let addAddressTextboxValue = toTitleCase(addAddressTextbox.value)
-        addStore(addStoreTextboxValue, addAddressTextboxValue)
-        addStoreTextbox.value = ""
+        addLocation(addLocationTextboxValue, addAddressTextboxValue)
+        addLocationTextbox.value = ""
         addAddressTextbox.value = ""
-        addStoreTextbox.focus()
+        addLocationTextbox.focus()
     }
 })
 
 
-if (addStoreTextbox.value == ''){
-addStoreTextbox.addEventListener('keypress', e => {
+if (addLocationTextbox.value == ''){
+addLocationTextbox.addEventListener('keypress', e => {
     if (e.keyCode === 13 || e.which === 13) {
         addAddressTextbox.focus()
     }
@@ -68,12 +68,12 @@ addStoreTextbox.addEventListener('keypress', e => {
 }
 
 addStoreBtn.addEventListener('click', () => {
-    let addStoreTextboxValue = toTitleCase(addStoreTextbox.value)
+    let addLocationTextboxValue = toTitleCase(addLocationTextbox.value)
     let addAddressTextboxValue = toTitleCase(addAddressTextbox.value)
-    addStore(addStoreTextboxValue, addAddressTextboxValue)
-    addStoreTextbox.value = ""
+    addLocation(addLocationTextboxValue, addAddressTextboxValue)
+    addLocationTextbox.value = ""
     addAddressTextbox.value = ""
-    addStoreTextbox.focus()
+    addLocationTextbox.focus()
 })
 
 
@@ -86,9 +86,9 @@ addStoreBtn.addEventListener('click', () => {
 
 
 
-function addStore(store, address) {
-    storesRef.push({
-        name: store,
+function addLocation(location, address) {
+    locationsRef.push({
+        name: location,
         address: address
     })
 }
@@ -97,12 +97,12 @@ function addStore(store, address) {
 
 
 
-function displayStores(stores) {
-    let storeItems = stores.map(store => {
+function displayLocations(locations) {
+    let locationItems = locations.map(location => {
         return `<div class="title store-title active">
         <i class="dropdown icon"></i>
-        ${store.name} - ${store.address}
-        <button class="ui icon button" style="float: right;" onclick='deleteStore("${store.key}")'><i class="trash icon"></i></button>
+        ${location.name} - ${location.address}
+        <button class="ui icon button" style="float: right;" onclick='deleteLocation("${location.key}")'><i class="trash icon"></i></button>
       </div>
       <div class="content">
 
@@ -149,27 +149,27 @@ function displayStores(stores) {
       <div class="ui action input">
       <input type="text" class="grocery-textboxes" id="grocery-category-textbox" placeholder="Category...">
       
-      <button onclick='addGroceryItem("${store.address}")' class="ui icon button teal"><i class="plus square icon"></i></button>
+      <button onclick='addGroceryItem("${location.address}")' class="ui icon button teal"><i class="plus square icon"></i></button>
       </div>   
       </div> 
     </div>
 </div>`
                 
     })
-    storeAccordion.innerHTML = storeItems.join('')
+    storeAccordion.innerHTML = locationItems.join('')
 }
 
 
 
-function deleteStore(key) {
-    storesRef.child(key).remove()
+function deleteLocation(key) {
+    locationsRef.child(key).remove()
 
 }
 
 
 function addGroceryItem(address) {
     console.log(address)
-    let groceriesRef = database.ref('stores').child('-Lkgy6Jx0mnefprfGufk').set({
+    let groceriesRef = database.ref('locations').child('-Lkgy6Jx0mnefprfGufk').set({
         groceryName: 'bread',
         categoryName: 'food'
     })

@@ -1,13 +1,13 @@
-class Location {
+class Store {
     constructor(name, address) {
         this.name = name
         this.address = address
-        this.locationId = ''
+        this.storeId = ''
         this.groceryItems = []
     }
 
-    deleteLocation(location) {
-        console.log(location)
+    deleteLocation(store) {
+        console.log(store)
         // locationsRef.child(location).remove()
         
     }
